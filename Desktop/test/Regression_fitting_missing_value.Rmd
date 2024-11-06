@@ -1,0 +1,35 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(corrplot)
+airquality_data <- read.csv("modified1.csv")
+head(airquality_data)
+sum(is.na(airquality_data$AH))
+
+airquality_data$T <- as.numeric(gsub(",", ".", airquality_data$T))
+airquality_data$RH <- as.numeric(gsub(",", ".", airquality_data$RH))
+airquality_data$AH <- as.numeric(gsub(",", ".", airquality_data$AH))
+airquality_data$CO_GT <- as.numeric(gsub(",", ".", airquality_data$CO.GT.))
+airquality_data$C6H6_GT <- as.numeric(gsub(",", ".", airquality_data$C6H6.GT.))
+
+numeric_columns <- sapply(airquality_data, is.numeric)
+correlation_matrix <- cor(airquality_data[, numeric_columns], use = "complete.obs")
+
+# I use this matrix to identify correlation between each variables
+print(correlation_matrix)
+corrplot(correlation_matrix, method = "color")
+
+# C6H6_GT, RH, T have strong correlation with AH
+
+# I think we can fit regression here and fill in predicted value to the NA cells
+model <- lm(AH ~ T + RH + C6H6_GT, data = airquality_data)
+missing_indices <- is.na(airquality_data$AH)
+airquality_data$AH[missing_indices] <- predict(model, newdata = airquality_data[missing_indices,])
+
+sum(is.na(airquality_data$AH))
+```
+
+

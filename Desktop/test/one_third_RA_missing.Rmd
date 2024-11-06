@@ -1,0 +1,21 @@
+---
+title: "one_third_RA_missing"
+output: html_document
+date: "2024-10-16"
+---
+
+```{r}
+airquality_data <- read.csv("AirQualityUCI copy.csv", sep = ";", header = TRUE)
+head(airquality_data)
+
+airquality_data$RH <- as.numeric(gsub(",", ".", airquality_data$RH))
+non_na_indices <- which(!is.na(airquality_data$RH))
+num_to_remove <- floor(length(non_na_indices) / 3)
+set.seed(123)  
+random_indices <- sample(non_na_indices, num_to_remove)
+airquality_data$RH[random_indices] <- NA
+
+write.csv(airquality_data, "one_third_RA_missing.csv", row.names = FALSE)
+
+```
+

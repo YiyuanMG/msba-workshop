@@ -1,0 +1,5 @@
+1. Today I'm attending the Git and GitHub workshop.
+2. It's raining today.
+3. I arrived on time.
+4. A few members were late.
+5. We will get credit for this workshop.
